@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 
 export default function Note({item,deleteNote,getAllNotes}){
     const [show, setShow] = useState(false);
-
+    let [deleteBtn,setDeleteBtn] = useState(false)
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -26,15 +26,13 @@ export default function Note({item,deleteNote,getAllNotes}){
             })
         })
         // console.log(data);
-        if (values.title  || values.content) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Congratulation',
-                text: 'Note Updated Successfully',
-                showConfirmButton: false,
-                timer: 1500
-              })
-        }
+        Swal.fire({
+            icon: 'success',
+            title: 'Congratulation',
+            text: 'Note Updated Successfully',
+            showConfirmButton: false,
+            timer: 1500
+            })
         
         getAllNotes();
     }
@@ -58,13 +56,38 @@ export default function Note({item,deleteNote,getAllNotes}){
     <div className="input-box">
         <h1>{item.title}</h1>
         <p>{item.content}</p>
-        <button onClick={handleShow} className='Update'>Update</button>
-        <img onClick={()=>deleteNote(item._id)} src={Delete} className='delete' alt="Delete"/>
+        <button onClick={()=>{
+            setDeleteBtn(false)
+            handleShow()
+            }} className='Update'>Update</button>
+        <img onClick={()=>{
+            setDeleteBtn(true)
+            handleShow()}} src={Delete} className='delete' alt="Delete"/>
     </div>
-
+    {deleteBtn?
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Delete Note</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            Are you sure you want to delete this Note?
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+            Close
+            </Button>
+            <Button variant="primary" onClick={()=>{
+                deleteNote(item._id)
+                handleClose()
+                }}>
+                Delete
+            </Button>
+        </Modal.Footer>
+    </Modal>
+    :
+    <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+            <Modal.Title>Update Note</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <form onSubmit={formik.handleSubmit}>
@@ -86,5 +109,6 @@ export default function Note({item,deleteNote,getAllNotes}){
             </Button>
         </Modal.Footer>
     </Modal>
+    }
     </>
 }

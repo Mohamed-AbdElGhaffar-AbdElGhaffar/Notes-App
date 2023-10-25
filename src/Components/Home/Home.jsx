@@ -43,6 +43,8 @@ export default function Home() {
       timer: 1500
     })
     getAllNotes();
+    document.querySelector("input").value = "";
+    document.querySelector("textarea").value = "";
   }
 
   async function getAllNotes() {
@@ -84,8 +86,7 @@ export default function Home() {
     // console.log(data);
     Swal.fire({
       icon: 'success',
-      title: 'Congratulation',
-      text: 'Note Deleted Successfully',
+      title: 'Note Deleted Successfully',
       showConfirmButton: false,
       timer: 1500
     })
